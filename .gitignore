@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# CogSci demo runtime data (persist via DEMO_DATA_DIR volume in production)
+cogsci_demo/demo/data/booth.db
+cogsci_demo/demo/data/booth_choices_export.csv

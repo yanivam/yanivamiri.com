@@ -1,0 +1,8 @@
+__pycache__
+*.py[cod]
+*.db
+.env
+.venv
+.git
+demo/data/booth.db
+demo/data/booth_choices_export.csv

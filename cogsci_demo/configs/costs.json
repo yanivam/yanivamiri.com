@@ -1,0 +1,40 @@
+{
+  "action_costs": {
+    "WAIT_MONITOR": 0.0,
+    "AUDIT_QOH_AND_UTZ": -5.0,
+    "IMPLEMENT_SOFT_LMA": -3.0,
+    "IMPLEMENT_HARD_LMA": -8.0,
+    "REMOVE_LMA": -2.0,
+    "QUERY_ALTERNATE_SUPPLIER": -2.0,
+    "SWITCH_SUPPLIER": -10.0,
+    "SWITCH_BACK_TO_PRIMARY": -10.0,
+    "CONTACT_MANUFACTURER_DIRECT": -15.0,
+    "REQUEST_FROM_RESERVE_WAREHOUSE": -100.0,
+    "REQUEST_LOAN_FROM_OTHER_HOSPITALS": -100.0,
+    "GREY_MARKET_PURCHASE": -200.0
+  },
+  "scenario_aware_penalties": {
+    "stable_scenario": {
+      "unnecessary_lma_penalty": -15.0,
+      "unnecessary_supplier_query_penalty": -5.0,
+      "unnecessary_audit_penalty": -8.0
+    },
+    "supplier_failure_scenario": {
+      "trust_unreliable_supplier_penalty": -10.0
+    },
+    "emergency_scenario": {
+      "delayed_emergency_action_penalty": -20.0
+    }
+  },
+  "supplier_trust_penalties": {
+    "query_reliable_supplier_penalty": -3.0,
+    "switch_from_reliable_supplier_penalty": -8.0,
+    "trust_unreliable_supplier_penalty": -5.0,
+    "switch_to_unreliable_supplier_penalty": -10.0
+  },
+  "urgency_aware_penalties": {
+    "high_runway_unnecessary_action_penalty": -12.0
+  },
+  "shortage_anomaly_penalty": -150.0,
+  "weekly_budget": 1000.0
+}

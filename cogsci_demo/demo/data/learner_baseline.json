@@ -1,0 +1,99 @@
+{
+  "attention_weights": {
+    "runway": 0.2,
+    "runway_uncertainty": 0.15,
+    "qoh": 0.08,
+    "qoh_uncertainty": 0.1,
+    "usage": 0.1,
+    "usage_uncertainty": 0.18,
+    "clinical": 0.14,
+    "reputation": 0.05
+  },
+  "simulation": {
+    "weeks": [
+      {
+        "week": 0,
+        "focused_drugs": [
+          "Drug F",
+          "Drug A"
+        ],
+        "total_reward": 16.5,
+        "stockouts": [],
+        "runways": {
+          "Drug A": 6.33,
+          "Drug F": 4.0
+        },
+        "decision_time_ms": 163.1
+      },
+      {
+        "week": 1,
+        "focused_drugs": [
+          "Drug F",
+          "Drug D"
+        ],
+        "total_reward": -9.3,
+        "stockouts": [],
+        "runways": {
+          "Drug D": 9.44,
+          "Drug F": 7.02
+        },
+        "decision_time_ms": 157.5
+      },
+      {
+        "week": 2,
+        "focused_drugs": [
+          "Drug A",
+          "Drug D"
+        ],
+        "total_reward": -5.66,
+        "stockouts": [],
+        "runways": {
+          "Drug A": 10.33,
+          "Drug D": 7.76
+        },
+        "decision_time_ms": 153.8
+      },
+      {
+        "week": 3,
+        "focused_drugs": [
+          "Drug B",
+          "Drug D"
+        ],
+        "total_reward": 21.38,
+        "stockouts": [],
+        "runways": {
+          "Drug B": 6.25,
+          "Drug D": 6.21
+        },
+        "decision_time_ms": 163.0
+      },
+      {
+        "week": 4,
+        "focused_drugs": [
+          "Drug D",
+          "Drug F"
+        ],
+        "total_reward": 115.06,
+        "stockouts": [],
+        "runways": {
+          "Drug D": 4.77,
+          "Drug F": 5.1
+        },
+        "decision_time_ms": 144.0
+      }
+    ],
+    "summary": {
+      "total_reward": 137.98,
+      "avg_reward_per_week": 27.6,
+      "total_stockouts": 0,
+      "final_focus": [
+        "Drug D",
+        "Drug F"
+      ],
+      "initial_focus": [
+        "Drug F",
+        "Drug A"
+      ]
+    }
+  }
+}

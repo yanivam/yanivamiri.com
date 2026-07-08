@@ -1,0 +1,55 @@
+{
+  "runway_rewards": {
+    "lt_1": -15.0,
+    "between_1_2": -2.0,
+    "between_2_4": 1.0,
+    "between_4_8": 2.0,
+    "between_8_16": 1.0,
+    "gt_16": -5.0,
+    "high_clinical_extra_under_1": -20.0,
+    "stockout_penalty": -1000000.0
+  },
+  "scenario_aware_rewards": {
+    "stable_scenario": {
+      "stability_maintenance_bonus": 5.0
+    },
+    "shortage_scenario": {
+      "lma_encouragement_bonus": 3.0,
+      "audit_encouragement_bonus": 2.0,
+      "supplier_query_encouragement_bonus": 1.0
+    },
+    "supplier_failure_scenario": {
+      "supplier_switch_encouragement_bonus": 5.0
+    },
+    "emergency_scenario": {
+      "emergency_action_encouragement_bonus": 8.0
+    }
+  },
+  "supplier_trust_rewards": {
+    "trust_reliable_supplier_bonus": 3.0,
+    "switch_from_unreliable_supplier_bonus": 100.0,
+    "switch_to_reliable_supplier_bonus": 80.0
+  },
+  "urgency_aware_rewards": {
+    "low_runway_appropriate_action_bonus": 6.0,
+    "critical_runway_emergency_action_bonus": 10.0
+  },
+  "delta_runway_weight": 10.0,
+  "recovery_bonus": 75.0,
+  "intervention_success_bonus": 40.0,
+  "stability_bonus": 20.0,
+  "prevention_bonus": 25.0,
+  "lma_effectiveness": {
+    "target_runway_weeks": 5.0,
+    "soft_lma_utilization_reduction": 0.25,
+    "hard_lma_utilization_reduction": 0.75,
+    "soft_lma_sufficient_bonus": 50.0,
+    "soft_lma_insufficient_penalty": -20.0,
+    "hard_lma_overkill_penalty": -10.0,
+    "hard_lma_appropriate_bonus": 40.0,
+    "hard_lma_insufficient_bonus": 20.0
+  },
+  "supplier_switching": {
+    "switch_back_to_primary_penalty": -1000.0
+  }
+}

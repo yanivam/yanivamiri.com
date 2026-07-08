@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#DCEBDD">
+  <title>Try It Yourself | Attention Policy Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <div class="app">
+    <header class="card card--dark card--hero" id="page-header">
+      <p class="eyebrow">CogSci 2026 · Interactive Demo</p>
+      <h1>You are the pharmacist</h1>
+      <div class="intro intro--poster">
+        <div class="intro-col">
+          <p>
+            During a drug shortage, a hospital pharmacist must manage hundreds of medications with limited time and attention. We are not going to make you do all of that.
+            To demonstrate the type of decisions that these pharmacists must make, we will simulate a simple scenario with six drugs, showing you a glimpse of how these decision makers prioritize where to focus their attention.
+          </p>
+          <p>
+            In our simulation, you are working at a local hospital and have to manage <strong>six drugs</strong> at a time. You are given a list of drugs and you hold some beliefs about those drugs (represented by the table below along with how much you trust those values).
+            Your task is to give your estimate as to which two drugs are most urgent and the three top factors as to WHY you chose that.
+          </p>
+        </div>
+        <div class="intro-col">
+          <p>
+            We will then compare your decisions against the learning agent from our paper
+            <a class="intro-link" href="https://arxiv.org/abs/2605.14111" target="_blank" rel="noopener">Modeling Bounded Rationality in Drug Shortage Pharmacists Using Attention-Guided Dynamic Decomposition</a>.
+            The reason for this demonstration is to show you the complexity of the decision space that these pharmacists face daily.
+          </p>
+          <p class="intro-note">
+            Please note that this is a simulation and not a real drug shortage. The drugs and values are not real and the results are not real. In the real world, these pharmacists are facing a much larger decision space in the hundreds or thousands depending on the hospital and are not able to deeply investigate many drugs, yet they maintain a stable supply.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main id="play">
+      <section id="step-select" class="step active">
+        <div class="play-poster">
+
+          <article class="card card--light card--section poster-cell poster-cell--intake">
+            <h2 class="card-heading">Get ready to run</h2>
+            <p class="hint">Add your info to receive your results, follow-up, and stay in touch.</p>
+            <div class="intake-fields">
+              <label class="field">
+                <span>Name</span>
+                <input type="text" id="name-input" placeholder="Your name" autocomplete="name">
+              </label>
+              <label class="field">
+                <span>Email</span>
+                <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email">
+              </label>
+              <label class="field field--wide">
+                <span>Background</span>
+                <select id="background-select">
+                  <option value="">Prefer not to say</option>
+                </select>
+              </label>
+              <label class="checkbox field--wide">
+                <input type="checkbox" id="consent-checkbox">
+                <span>OK to receive my result and optional project follow-up.</span>
+              </label>
+            </div>
+          </article>
+
+          <article class="card card--dark card--section poster-table-panel poster-cell poster-cell--choices" id="briefing-panel">
+            <div class="section-head section-head--row">
+              <div>
+                <h2 class="card-heading">Your choices</h2>
+                <p class="hint legend-hint">
+                  Tap two <strong>drug columns</strong> (A–F) for your week 1 focus.
+                  Each cell shows a <strong>value</strong> and <strong>trust</strong> (0–1).
+                </p>
+              </div>
+              <span class="pick-counter" id="drug-counter">0 / 2 drugs</span>
+            </div>
+            <div class="poster-table-wrap poster-table-wrap--inset">
+              <table class="poster-table" id="poster-table">
+                <thead>
+                  <tr id="poster-table-head"></tr>
+                </thead>
+                <tbody id="poster-table-body"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card card--light card--section pick-panel poster-cell poster-cell--factors" id="factor-panel">
+            <div class="section-head section-head--row">
+              <div>
+                <h2 class="card-heading">What drives your attention?</h2>
+                <p class="hint">Pick three factors in <strong>priority order</strong>: 1st = 50%, 2nd = 35%, 3rd = 15%.</p>
+              </div>
+              <span class="pick-counter" id="factor-counter">0 / 3</span>
+            </div>
+            <div id="factor-grid" class="choice-grid factor-grid"></div>
+          </article>
+
+          <div class="card card--dark card--section poster-cell poster-cell--run run-bar">
+            <button id="btn-run" class="btn btn-run" disabled>
+              <span class="btn-label">Face the Learner Agent</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="step-loading" class="step">
+        <div class="card card--dark card--loading">
+          <div class="loading-panel">
+            <div class="loading-ring" aria-hidden="true">
+              <div class="loading-ring-inner"></div>
+            </div>
+            <h2 class="loading-title">Simulating 5 weeks…</h2>
+            <p class="loading-status" id="loading-status">Loading crisis scenario</p>
+            <div class="loading-versus">
+              <span class="versus-side you">You</span>
+              <span class="versus-badge">VS</span>
+              <span class="versus-side learner">Learner</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="step-results" class="step results-board">
+        <div class="board-grid">
+
+          <article class="pin pin-attention-story" id="attention-story"></article>
+
+          <details class="pin pin-chart-collapsed">
+            <summary>Weekly rewards</summary>
+            <div id="weekly-bars" class="weekly-bars"></div>
+          </details>
+
+          <article class="pin pin-stockouts" id="stockout-highlights"></article>
+
+          <article class="pin pin-actions">
+            <div class="result-actions">
+              <button id="btn-copy-link" class="btn btn-secondary" type="button">Copy link</button>
+              <button id="btn-share" class="btn btn-secondary" type="button">Copy summary</button>
+              <button id="btn-restart" class="btn btn-run" type="button">
+                <span class="btn-label">Play again</span>
+              </button>
+            </div>
+            <p class="saved-note" id="saved-note">Saved anonymously · your picks are logged for research</p>
+          </article>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Modeling Bounded Rationality in Drug Shortage Pharmacists Using Attention-Guided Dynamic Decomposition</p>
+      <p class="footer-sub">Yaniv Amiri · Noah Chicoine · Jacqueline Griffin · Stacy Marsella · Northeastern University</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js?v=20260707b"></script>
+</body>
+</html>
