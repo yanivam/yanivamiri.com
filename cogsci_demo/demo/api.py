@@ -6,15 +6,33 @@ import os
 import re
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
+from demo.admin_exports import admin_summary, build_choices_csv, build_contacts_csv
 from demo.constants import BACKGROUND_OPTIONS, DRUG_DISPLAY
 from demo.simulation import get_scenario_preview, run_comparison
 from demo.storage import get_session, init_db, save_email, save_email_for_session, save_session
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+ADMIN_TOKEN = os.getenv("DEMO_ADMIN_TOKEN")
+_admin_bearer = HTTPBearer(auto_error=False)
+
+
+def _require_admin(
+    credentials: HTTPAuthorizationCredentials | None = Depends(_admin_bearer),
+) -> None:
+    if not ADMIN_TOKEN:
+        raise HTTPException(
+            status_code=503,
+            detail="Admin exports are disabled. Set DEMO_ADMIN_TOKEN on the server.",
+        )
+    if credentials is None or credentials.credentials != ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Invalid admin token")
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -158,6 +176,34 @@ def connect(request: ConnectRequest) -> dict[str, str]:
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     return {"status": "ok"}
+
+
+@app.get("/api/admin/summary")
+def admin_stats(_: None = Depends(_require_admin)) -> dict:
+    return admin_summary()
+
+
+@app.get("/api/admin/contacts.csv")
+def admin_contacts_csv(_: None = Depends(_require_admin)) -> Response:
+    return Response(
+        content=build_contacts_csv(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="booth_contacts.csv"'},
+    )
+
+
+@app.get("/api/admin/choices.csv")
+def admin_choices_csv(_: None = Depends(_require_admin)) -> Response:
+    return Response(
+        content=build_choices_csv(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="booth_choices.csv"'},
+    )
+
+
+@app.get("/admin")
+def admin_page() -> FileResponse:
+    return FileResponse(STATIC_DIR / "admin.html")
 
 
 @app.get("/")

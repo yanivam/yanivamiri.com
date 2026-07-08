@@ -23,14 +23,22 @@ The demo stores sessions and emails in SQLite. Use a host with a **persistent vo
 3. Railway reads [`railway.toml`](railway.toml) and builds from the root [`Dockerfile`](Dockerfile).
 4. Add a **Volume** to the service:
    - Mount path: `/data`
-5. Add environment variable:
+5. Add environment variables:
    - `DEMO_DATA_DIR` = `/data`
+   - `DEMO_ADMIN_TOKEN` = a long random password (for `/admin` CSV downloads)
 6. **Settings → Networking → Generate Domain** (e.g. `your-demo.up.railway.app`).
 7. Optional: attach a custom domain such as `demo.yanivamiri.com` (CNAME to Railway).
 
 **QR code / Squarespace link** → point to the public URL root (`/`), not a session link.
 
-### After the conference
+### Retrieve responses after the conference
+
+Open **https://your-app.up.railway.app/admin**, enter your `DEMO_ADMIN_TOKEN`, then download:
+
+- **contacts CSV** — names and emails (with consent)
+- **choices CSV** — every run’s drug/factor picks
+
+Or download `booth.db` from the Railway volume and export locally (see below).
 
 Download `booth.db` from the Railway volume, place at `cogsci_demo/demo/data/booth.db`, then:
 
