@@ -131,7 +131,7 @@
 <body>
   <div class="card">
     <h1>Demo admin</h1>
-    <p class="sub">Download conference responses. Use the admin token from Railway (<code>DEMO_ADMIN_TOKEN</code>).</p>
+    <p class="sub">Download conference responses. First set <code>DEMO_ADMIN_TOKEN</code> in Railway Variables, redeploy, then paste the <strong>same</strong> value here.</p>
 
     <label for="token">Admin token</label>
     <input type="password" id="token" placeholder="Paste token" autocomplete="current-password">
@@ -187,14 +187,26 @@
       el.classList.toggle("error", isError);
     }
 
+    function adminErrorMessage(status, detail) {
+      if (status === 503) {
+        return "Server not configured: add DEMO_ADMIN_TOKEN in Railway → Variables, then redeploy.";
+      }
+      if (status === 401) {
+        return "Wrong token. It must match DEMO_ADMIN_TOKEN in Railway exactly.";
+      }
+      return detail || `Request failed (${status})`;
+    }
+
     async function loadSummary() {
       saveToken();
+      document.getElementById("stats").hidden = true;
+      document.getElementById("downloads").hidden = true;
       setStatus("Loading…");
       try {
         const res = await fetch("/api/admin/summary", { headers: authHeaders() });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.detail || `Request failed (${res.status})`);
+          throw new Error(adminErrorMessage(res.status, err.detail));
         }
         const data = await res.json();
         document.getElementById("stat-sessions").textContent = data.sessions;
@@ -206,8 +218,6 @@
           : "No runs yet";
         setStatus(latest);
       } catch (err) {
-        document.getElementById("stats").hidden = true;
-        document.getElementById("downloads").hidden = true;
         setStatus(err.message, true);
       }
     }
@@ -219,7 +229,7 @@
         const res = await fetch(path, { headers: authHeaders() });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.detail || `Download failed (${res.status})`);
+          throw new Error(adminErrorMessage(res.status, err.detail));
         }
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
